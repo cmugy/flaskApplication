@@ -1,6 +1,6 @@
 from typing import Optional
 
-from flask import Flask, jsonify
+from flask import Flask, jsonify,request
 import requests
 import json
 
@@ -24,7 +24,21 @@ def get_employees():
     else:
         response.raise_for_status()
 
+
+@app.route('/employees/<int:id>')
+def get_employee_by_id(id):
+    url= f'https://employeewebapiazure20180822105822.azurewebsites.net/api/employees/{id}'
     
+    response= requests.get(url)
+    
+    if(response.ok):
+        content= response.content
+        jsonData: object= json.loads(content)
+        return jsonify(jsonData)
+
+    else:
+        response.raise_for_status()
+
 
 
 app.run(port=5000)
